@@ -960,6 +960,11 @@ async def shutdown_db_client():
 
 if __name__ == "__main__":
     import uvicorn
-    # This block only runs if you type: python main.py
+    import os
+    
+    # Render provides the port via the PORT environment variable
+    # We default to 8001 for local development
     port = int(os.environ.get("PORT", 8080))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    
+    # host MUST be 0.0.0.0 for Render to detect the open port
+    uvicorn.run(socket_app, host="0.0.0.0", port=port)
