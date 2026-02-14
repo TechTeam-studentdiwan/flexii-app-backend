@@ -198,6 +198,14 @@ class ValidateCouponRequest(BaseModel):
 
 # ============== AUTH ROUTES ==============
 
+@app.get("/")
+async def api_check():
+    return {
+        "status": "online",
+        "message": "E-commerce API is running",
+        "timestamp": datetime.utcnow()
+    }
+
 @api_router.post("/auth/register")
 async def register(email: str = Body(...), password: str = Body(...), name: str = Body(...)):
     # Check if user already exists
@@ -948,3 +956,10 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+
+if __name__ == "__main__":
+    import uvicorn
+    # This block only runs if you type: python main.py
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
